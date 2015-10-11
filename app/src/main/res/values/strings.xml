@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Toggle Data Test Tool</string>
+    <string name="large_text">
+        "LOG: \n\n"
+    </string>
+    <string name="action_settings">Settings</string>
+</resources>
