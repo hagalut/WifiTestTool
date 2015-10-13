@@ -10,6 +10,10 @@
         android:fitsSystemWindows="true" android:layout_height="@dimen/app_bar_height"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
 
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin" android:text="@string/infoText"
+            android:id="@+id/infoTextView" />
+
         <android.support.design.widget.CollapsingToolbarLayout android:id="@+id/toolbar_layout"
             android:fitsSystemWindows="true" android:layout_width="match_parent"
             android:layout_height="match_parent" app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -19,7 +23,15 @@
                 android:layout_height="?attr/actionBarSize" android:layout_width="match_parent"
                 app:layout_collapseMode="pin" app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+            <Spinner
+                android:id="@+id/minutes_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#fc0e0e">
+                </Spinner>
+
         </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_scrolling" />

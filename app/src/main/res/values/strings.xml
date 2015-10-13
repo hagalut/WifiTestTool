@@ -4,4 +4,15 @@
         "LOG: \n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="infoText">Plese Select sequence. Turn Data ON or OFF every (in minutes) Note: WiFi tathering will turn ON when play pressed.</string>
+
+    <string-array name="minuntes_array">
+        <item>30 seconds</item>
+        <item>1 min</item>
+        <item>2 min</item>
+        <item>10 min</item>
+        <item>20 min</item>
+        <item>30 min</item>
+        <item>60 min</item>
+    </string-array>
 </resources>

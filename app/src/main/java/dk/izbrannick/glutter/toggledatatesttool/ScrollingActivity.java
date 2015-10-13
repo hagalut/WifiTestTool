@@ -2,6 +2,7 @@ package dk.izbrannick.glutter.toggledatatesttool;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -13,7 +14,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +36,7 @@ public class ScrollingActivity extends AppCompatActivity {
     private Handler handler;
     private TextView textView;
     private EditText editText;
-    private long delayMills = 6000;
+    private long delayMills = 30000;
     private int togglCount = 0;
     private String onOffTxt;
 
@@ -41,13 +45,43 @@ public class ScrollingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrolling);
 
-
-
         ctx = getApplicationContext();
         textView = (TextView) findViewById(R.id.log_text);
 
 
+        Spinner spinner = (Spinner) findViewById(R.id.minutes_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.minuntes_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                switch (i){
+                    case 0:
+                        delayMills = 30000;
+                        break;
+                    case 1:
+                        delayMills = 60000;
+                        break;
+                    case 2:
+                        delayMills = 120000;
+                        break;
+                }
+
+                Snackbar.make(view, "Selected" +i+" minutes", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,6 +92,9 @@ public class ScrollingActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // turn wifi tathering ON
+                setWifiTetheringEnabled(true);
 
                 isONOFF = !isONOFF;
 
@@ -73,27 +110,6 @@ public class ScrollingActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void toggleData()
@@ -159,6 +175,21 @@ public class ScrollingActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setWifiTetheringEnabled(boolean enable) {
+        WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+
+        Method[] methods = wifiManager.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.getName().equals("setWifiApEnabled")) {
+                try {
+                    method.invoke(wifiManager, null, enable);
+                } catch (Exception ex) {
+                }
+                break;
+            }
         }
     }
 
